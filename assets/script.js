@@ -118,6 +118,8 @@
       else if (dir < 0 && track.scrollLeft <= 4) track.scrollTo({ left: max + 4, behavior: bh });
       else track.scrollBy({ left: step() * dir, behavior: bh });
     };
+    var fit = function () { car.classList.toggle("is-fit", track.scrollWidth <= track.clientWidth + 2); };
+    fit(); window.addEventListener("resize", fit); window.addEventListener("load", fit);
     $$(".arrow", car).forEach(function (b) { b.addEventListener("click", function () { go(Number(b.dataset.dir)); }); });
     if (dotsBox) slides.forEach(function () { var d = document.createElement("span"); dotsBox.appendChild(d); dots.push(d); });
     if (hasIO) {
