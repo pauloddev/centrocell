@@ -435,3 +435,12 @@ svg{width:1em;height:1em;flex:none}
   .lt__bike .ph{left:10px;top:-12px;font-size:18px}
   @keyframes ride{0%{left:0;transform:scaleX(1)}46%{left:calc(100% - 40px);transform:scaleX(1)}50%{left:calc(100% - 40px);transform:scaleX(-1)}96%{left:0;transform:scaleX(-1)}100%{left:0;transform:scaleX(1)}}
 }
+
+/* Setas laterais dos carrosséis (sempre visíveis, inclusive no celular) */
+.car__stage{position:relative}
+.arrow--side{position:absolute;top:50%;margin-top:-26px;z-index:4;width:52px;height:52px;background:rgba(0,0,0,.78);border:1.5px solid var(--red);color:#fff;font-size:22px;box-shadow:0 8px 24px -6px rgba(0,0,0,.8),0 0 18px -4px var(--red-glow);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.arrow--side.arrow--prev{left:-14px}
+.arrow--side.arrow--next{right:-14px}
+.arrow--side:hover{background:var(--red)}
+.arrow--side:active{transform:scale(.94)}
+@media (max-width:700px){.arrow--side{width:44px;height:44px;margin-top:-22px}.arrow--side.arrow--prev{left:4px}.arrow--side.arrow--next{right:4px}}
