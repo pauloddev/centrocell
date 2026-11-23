@@ -459,3 +459,9 @@ svg{width:1em;height:1em;flex:none}
   .info__ctas .btn{width:100%;justify-content:center}
 }
 @media (max-width:520px){.rating__ctas{flex-direction:column;align-items:stretch}.rating__ctas .btn{width:100%;justify-content:center}}
+
+/* Foto da bancada no fundo do topo */
+.hero{overflow:hidden;isolation:isolate}
+.hero__bg{position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.6) 55%,#000 100%),linear-gradient(90deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.55) 55%,rgba(0,0,0,.35) 100%),url(img/bancada-topo.webp) center 30%/cover no-repeat}
+@media (max-width:900px){.hero__bg{background:linear-gradient(180deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.78) 60%,#000 100%),url(img/bancada-topo-900.webp) center 20%/cover no-repeat}}
