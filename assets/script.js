@@ -145,7 +145,7 @@
     rv.classList.toggle("is-paused", p);
   });
 
-  // Aberto agora? (Sorocaba/SP): seg a sáb, 08:00 às 18:30
+  // Aberto agora? (Sorocaba/SP): seg a sex, 08:00 às 18:30; sábado, 08:00 às 15:00
   var status = $("#status");
   if (status) {
     var parts = {};
@@ -157,9 +157,10 @@
     if (wd === undefined) { var n = new Date(); wd = n.getDay(); parts.hour = n.getHours(); parts.minute = n.getMinutes(); }
     var m = (Number(parts.hour) % 24) * 60 + Number(parts.minute);
     $$(".hours tr").forEach(function (tr) { if (Number(tr.dataset.d) === wd) tr.classList.add("is-today"); });
-    var open = wd >= 1 && wd <= 6 && m >= 480 && m < 1110;
+    var close = wd === 6 ? 900 : 1110;
+    var open = wd >= 1 && wd <= 6 && m >= 480 && m < close;
     if (open) {
-      var left = 1110 - m;
+      var left = close - m;
       status.textContent = left <= 60 ? "Aberto agora · fecha em " + left + " min" : "Aberto agora";
       status.classList.add("is-open");
     } else { status.textContent = "Fechado agora"; status.classList.add("is-closed"); }
