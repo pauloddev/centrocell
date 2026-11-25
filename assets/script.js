@@ -66,25 +66,12 @@
   // Google: estrelas + contador
   var starsEl = $("#stars"), count = $("#count");
   var fmt = function (n) { return n.toLocaleString("pt-BR"); };
-  var runRating = function () {
-    starsEl.classList.add("is-lit");
-    if (reduce) return;
-    var to = Number(count.dataset.to), t0 = null, dur = 2200;
-    var step = function (t) {
-      if (!t0) t0 = t;
-      var p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 4);
-      count.textContent = fmt(Math.round(to * e)) + (p === 1 ? "+" : "");
-      if (p < 1) requestAnimationFrame(step);
-    };
-    count.textContent = "0";
-    requestAnimationFrame(step);
-  };
+  var runRating = function () { starsEl.classList.add("is-lit"); };
   if (starsEl && count) {
     if (hasIO) {
       var rio = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { runRating(); rio.disconnect(); } }, { threshold: 0.45 });
       rio.observe(starsEl);
     } else { runRating(); }
-    if (reduce) count.textContent = "3.400+";
   }
 
   // Vídeos: tocam só quando visíveis
