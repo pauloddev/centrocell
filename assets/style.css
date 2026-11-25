@@ -617,3 +617,12 @@ main section[id]:not(#vitrine){scroll-margin-top:calc(12px - clamp(44px,6.5vw,84
 .loc{grid-template-areas:"photo side" "lab lab"}
 .loc__photo{grid-area:photo}.loc__side{grid-area:side}.loc .lab{grid-area:lab;margin-top:26px}
 @media (max-width:960px){.loc{grid-template-areas:"photo" "lab" "side"}.loc .lab{margin-top:14px}}
+
+/* hero: chamada principal em destaque */
+.hero__sub{font-family:var(--f-head);font-style:italic;font-weight:800;text-transform:uppercase;letter-spacing:.01em;font-size:clamp(30px,3.4vw,50px)!important;line-height:1.02!important;max-width:20ch!important;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.95),0 0 22px rgba(0,0,0,.85)}
+.hero__sub .hl{color:#ff2b2b;display:block;margin-top:4px}
+@media (max-width:900px){
+ .hero{padding-top:max(330px,110vw)!important}
+ .hero__sub{font-size:clamp(28px,8.4vw,40px)!important;max-width:none!important}
+ .hero .hero__bg{background:linear-gradient(180deg,rgba(0,0,0,.55) 0,rgba(0,0,0,0) 14%,rgba(0,0,0,0) 40%,rgba(0,0,0,.82) max(330px,110vw),rgba(0,0,0,.8) 100%),url(fotos/fachada-640.webp) center top/cover no-repeat!important}
+}
