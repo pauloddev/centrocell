@@ -26,15 +26,6 @@
   var scrolled = null, ticking = false;
   var onScroll = function () { ticking = false; var s = window.scrollY > 10; if (s !== scrolled) { scrolled = s; header.classList.toggle("is-scrolled", s); } };
   onScroll(); window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
-  var burger = $(".burger"), drawer = $("#drawer");
-  var setMenu = function (open) {
-    burger.setAttribute("aria-expanded", open);
-    burger.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
-    drawer.classList.toggle("is-open", open);
-  };
-  burger.addEventListener("click", function () { setMenu(burger.getAttribute("aria-expanded") !== "true"); });
-  $$("#drawer a").forEach(function (a) { a.addEventListener("click", function () { setMenu(false); }); });
-  window.addEventListener("resize", function () { if (window.innerWidth > 1060) setMenu(false); });
 
   // WhatsApp flutuante
   var wa = $("#wa"), waBtn = $(".wa__btn");
