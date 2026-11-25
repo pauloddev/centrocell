@@ -258,7 +258,7 @@ svg{width:1em;height:1em;flex:none}
 .dots span{width:7px;height:7px;border-radius:7px;background:rgba(255,255,255,.2);transition:width .3s,background .3s}
 .dots span.is-on{width:24px;background:var(--red)}
 @media (max-width:1000px){.track{gap:14px}.slide{flex-basis:calc((100% - 2*14px)/3)}}
-@media (max-width:700px){.track{gap:12px}.slide{flex-basis:62%}.car__nav{display:none}}
+@media (max-width:700px){.car__nav{display:none}}
 
 /* ===== lista de acessórios ===== */
 .acc-hero{position:relative;padding:clamp(28px,4vw,44px);border-radius:28px;margin-bottom:clamp(36px,5vw,56px);background:linear-gradient(120deg,var(--red3),var(--red) 55%,#ff4a4a);overflow:hidden;isolation:isolate}
@@ -631,21 +631,18 @@ main section[id]:not(#vitrine){scroll-margin-top:calc(12px - clamp(44px,6.5vw,84
 .car--sq .slide figure{aspect-ratio:5/6}
 .car--sq .slide figure img{object-position:50% 50%}
 .slide__ok{display:block;margin-top:4px;color:#ff2b2b;font-weight:800;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;line-height:1.25}
-@media (max-width:700px){
- .car--sq .track{padding-inline:10%;gap:10px}
- .car--sq .slide{flex-basis:80%;scroll-snap-align:center;scroll-snap-stop:always;transition:opacity .35s,transform .35s}
- .car--sq .track>.slide:first-child,.car--sq .track>.slide:last-child{margin-left:0;margin-right:0}
- .car--sq .slide:not(.is-on){opacity:.5;transform:scale(.94)}
-}
 
 .storefront{margin:22px auto 0;max-width:460px;border-radius:24px;overflow:hidden;border:1px solid var(--line2);background:#111;aspect-ratio:3/4}
 .storefront img{width:100%;height:100%;object-fit:cover;display:block}
 @media (max-width:700px){.storefront{max-width:none;margin-top:16px}}
 
-/* todos os carrosséis no celular: só a mídia da vez em destaque, vizinhas com ~10% visível */
+
+/* CARROSSEL MOBILE: mídia da vez centralizada, vizinhas com ~5% visível */
+.car__stage{container-type:inline-size}
 @media (max-width:700px){
- .track{padding-inline:10%;gap:8px;scroll-padding-inline:10%}
- .slide{flex-basis:80%;scroll-snap-align:center;scroll-snap-stop:always;transition:opacity .35s,transform .35s}
- .track>.slide:first-child,.track>.slide:last-child{margin-left:0;margin-right:0}
- .slide:not(.is-on){opacity:.4;transform:scale(.94)}
+ .track{--g:10px;--sw:calc((100vw - 52px)/1.1);gap:var(--g);padding-inline:calc((100% - var(--sw))/2);padding-bottom:4px;scroll-padding-inline:0}
+ @supports (width:1cqw){.track{--sw:calc((100cqw - 2*var(--g))/1.1)}}
+ .track>.slide,.track>.slide:first-child,.track>.slide:last-child{flex:0 0 var(--sw);width:var(--sw);margin-left:0;margin-right:0;scroll-snap-align:center;scroll-snap-stop:always;transition:opacity .35s,transform .35s}
+ .slide:not(.is-on){opacity:.45}
+ .slide figcaption{padding-inline:2px}
 }
