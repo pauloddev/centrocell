@@ -613,3 +613,7 @@ main section[id]:not(#vitrine){scroll-margin-top:calc(12px - clamp(44px,6.5vw,84
  .hero__txt{position:relative}
 }
 @media (min-width:901px){.hero__txt{text-shadow:0 1px 3px rgba(0,0,0,.8)}}
+
+.loc{grid-template-areas:"photo side" "lab lab"}
+.loc__photo{grid-area:photo}.loc__side{grid-area:side}.loc .lab{grid-area:lab;margin-top:26px}
+@media (max-width:960px){.loc{grid-template-areas:"photo" "lab" "side"}.loc .lab{margin-top:14px}}
