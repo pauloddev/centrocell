@@ -74,6 +74,28 @@
     } else { runRating(); }
   }
 
+  // Marca selecionada vai junto na mensagem do orçamento
+  var cta = $("#brand-cta");
+  if (cta) {
+    var label = $("span", cta), baseLabel = label ? label.textContent : "", picked = "";
+    var upd = function () {
+      var msg = cta.dataset.msg + (picked ? " Marca do aparelho: " + picked + "." : "") + " Modelo e defeito: ";
+      cta.href = "https://wa.me/" + cta.dataset.num + "?text=" + encodeURIComponent(msg);
+      if (label) label.textContent = picked ? baseLabel + " · " + picked : baseLabel;
+    };
+    var opts = $$(".brand-opt");
+    opts.forEach(function (b) {
+      b.addEventListener("click", function () {
+        var on = b.getAttribute("aria-pressed") === "true";
+        opts.forEach(function (o) { o.setAttribute("aria-pressed", "false"); });
+        picked = on ? "" : b.dataset.brand;
+        if (!on) b.setAttribute("aria-pressed", "true");
+        upd();
+      });
+    });
+    upd();
+  }
+
   // Vídeos: tocam só quando visíveis
   var videos = $$("video");
   var userPaused = new WeakSet();
@@ -141,7 +163,7 @@
     var tick = function () { if (!hold && visible && !document.hidden) go(1); };
     if (hasIO && !reduce) new IntersectionObserver(function (es) {
       visible = es[0].isIntersecting;
-      if (visible && !timer) timer = setInterval(tick, car.querySelector("video") ? 6000 : 3800);
+      if (visible && !timer) timer = setInterval(tick, car.querySelector("video") ? 6000 : 2900);
     }, { threshold: 0.3 }).observe(track);
   });
 
