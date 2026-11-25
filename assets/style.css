@@ -585,7 +585,7 @@ main section[id]:not(#vitrine){scroll-margin-top:calc(12px - clamp(44px,6.5vw,84
 .brands__hint{text-align:center;margin-top:16px;color:var(--mut,#aaa);font-size:14.5px}
 
 /* antes e depois: slides quadrados */
-.car--sq .slide figure{aspect-ratio:1/1}
+
 .section--tight{padding-top:36px;padding-bottom:36px}
 /* laboratório */
 .lab{margin-top:44px}
@@ -625,4 +625,15 @@ main section[id]:not(#vitrine){scroll-margin-top:calc(12px - clamp(44px,6.5vw,84
  .hero{padding-top:max(330px,110vw)!important}
  .hero__sub{font-size:clamp(28px,8.4vw,40px)!important;max-width:none!important}
  .hero .hero__bg{background:linear-gradient(180deg,rgba(0,0,0,.55) 0,rgba(0,0,0,0) 14%,rgba(0,0,0,0) 40%,rgba(0,0,0,.82) max(330px,110vw),rgba(0,0,0,.8) 100%),url(fotos/fachada-640.webp) center top/cover no-repeat!important}
+}
+
+/* antes e depois: slide em destaque, vizinhos só aparecem de leve */
+.car--sq .slide figure{aspect-ratio:5/6}
+.car--sq .slide figure img{object-position:50% 50%}
+.slide__ok{display:block;margin-top:4px;color:#ff2b2b;font-weight:800;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;line-height:1.25}
+@media (max-width:700px){
+ .car--sq .track{padding-inline:10%;gap:10px}
+ .car--sq .slide{flex-basis:80%;scroll-snap-align:center;scroll-snap-stop:always;transition:opacity .35s,transform .35s}
+ .car--sq .track>.slide:first-child,.car--sq .track>.slide:last-child{margin-left:0;margin-right:0}
+ .car--sq .slide:not(.is-on){opacity:.5;transform:scale(.94)}
 }

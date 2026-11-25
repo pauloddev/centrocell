@@ -144,7 +144,7 @@
     if (dotsBox) slides.forEach(function () { var d = document.createElement("span"); dotsBox.appendChild(d); dots.push(d); });
     if (hasIO) {
       var cio = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { var i = slides.indexOf(e.target); if (dots[i]) dots[i].classList.toggle("is-on", e.intersectionRatio > 0.6); });
+        es.forEach(function (e) { var i = slides.indexOf(e.target); if (dots[i]) dots[i].classList.toggle("is-on", e.intersectionRatio > 0.6); if (i > -1) slides[i].classList.toggle("is-on", e.intersectionRatio > 0.6); });
       }, { root: track, threshold: [0, 0.6, 1] });
       slides.forEach(function (s) { cio.observe(s); });
     }
