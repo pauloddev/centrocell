@@ -601,3 +601,15 @@ main section[id]:not(#vitrine){scroll-margin-top:calc(12px - clamp(44px,6.5vw,84
 .rv{width:min(330px,80vw);padding:14px 16px;gap:6px}
 .rv p{font-size:13.5px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
 .rv__av{width:36px;height:36px;font-size:16px}
+
+/* hero: texto mais legível sobre a fachada */
+.hero__tag,.hero__sub,.hero__chips li{text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 14px rgba(0,0,0,.7)}
+.hero__sub{color:#fff;font-weight:500}
+.hero__sub strong{color:#fff}
+.hero__tag{background:rgba(0,0,0,.72)!important;border-color:rgba(255,255,255,.18)!important}
+.hero__chips li{background:rgba(0,0,0,.72)!important;color:#fff!important;border-color:rgba(255,255,255,.22)!important}
+@media (max-width:900px){
+ .hero .hero__bg{background:linear-gradient(180deg,rgba(0,0,0,.8) 0%,rgba(0,0,0,.74) 45%,rgba(0,0,0,.45) 72%,rgba(0,0,0,.8) 100%),url(fotos/fachada-640.webp) center top/cover no-repeat!important}
+ .hero__txt{position:relative}
+}
+@media (min-width:901px){.hero__txt{text-shadow:0 1px 3px rgba(0,0,0,.8)}}
