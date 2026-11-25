@@ -646,3 +646,4 @@ main section[id]:not(#vitrine){scroll-margin-top:calc(12px - clamp(44px,6.5vw,84
  .slide:not(.is-on){opacity:.45}
  .slide figcaption{padding-inline:2px}
 }
+.header .btn--sm{margin-left:auto}
