@@ -13,10 +13,19 @@
     setTimeout(hide, 2400);
   }
 
+  // Vídeo do topo só depois que a página carregou
+  var heroVid = $("video[data-hero]");
+  if (heroVid) {
+    var saver = navigator.connection && navigator.connection.saveData;
+    var startHero = function () { if (saver || reduce) return; heroVid.preload = "auto"; var p = heroVid.play(); if (p && p.catch) p.catch(function () {}); };
+    if (document.readyState === "complete") setTimeout(startHero, 300); else window.addEventListener("load", function () { setTimeout(startHero, 300); });
+  }
+
   // Cabeçalho e menu
   var header = $(".header");
-  var onScroll = function () { header.classList.toggle("is-scrolled", window.scrollY > 10); };
-  onScroll(); window.addEventListener("scroll", onScroll, { passive: true });
+  var scrolled = null, ticking = false;
+  var onScroll = function () { ticking = false; var s = window.scrollY > 10; if (s !== scrolled) { scrolled = s; header.classList.toggle("is-scrolled", s); } };
+  onScroll(); window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
   var burger = $(".burger"), drawer = $("#drawer");
   var setMenu = function (open) {
     burger.setAttribute("aria-expanded", open);
@@ -118,6 +127,17 @@
       else if (dir < 0 && track.scrollLeft <= 4) track.scrollTo({ left: max + 4, behavior: bh });
       else track.scrollBy({ left: step() * dir, behavior: bh });
     };
+    var hydrated = false;
+    var hydrate = function () {
+      if (hydrated) return; hydrated = true;
+      $$("img[data-src]", track).forEach(function (im) {
+        if (im.dataset.srcset) im.srcset = im.dataset.srcset;
+        im.src = im.dataset.src; im.removeAttribute("data-src"); im.removeAttribute("data-srcset");
+      });
+    };
+    track.addEventListener("scroll", hydrate, { once: true, passive: true });
+    car.addEventListener("pointerdown", hydrate, { once: true, passive: true });
+    $$(".arrow", car).forEach(function (b) { b.addEventListener("click", hydrate, { once: true }); });
     var fit = function () { car.classList.toggle("is-fit", track.scrollWidth <= track.clientWidth + 2); };
     fit(); window.addEventListener("resize", fit); window.addEventListener("load", fit);
     $$(".arrow", car).forEach(function (b) { b.addEventListener("click", function () { go(Number(b.dataset.dir)); }); });
@@ -147,25 +167,48 @@
     rv.classList.toggle("is-paused", p);
   });
 
-  // Aberto agora? (Sorocaba/SP): seg a sex, 08:00 às 18:30; sábado, 08:00 às 15:00
-  var status = $("#status");
+  // Horário dinâmico (Sorocaba/SP): seg a sex 08:00 às 18:30; sábado 08:00 às 15:00; domingo fechado
+  var status = $("#status"), dayBar = $("#daybar");
   if (status) {
-    var parts = {};
-    try {
-      new Intl.DateTimeFormat("en-US", { timeZone: "America/Sao_Paulo", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false })
-        .formatToParts(new Date()).forEach(function (p) { parts[p.type] = p.value; });
-    } catch (e) {}
-    var wd = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[parts.weekday];
-    if (wd === undefined) { var n = new Date(); wd = n.getDay(); parts.hour = n.getHours(); parts.minute = n.getMinutes(); }
-    var m = (Number(parts.hour) % 24) * 60 + Number(parts.minute);
-    $$(".hours tr").forEach(function (tr) { if (Number(tr.dataset.d) === wd) tr.classList.add("is-today"); });
-    var close = wd === 6 ? 900 : 1110;
-    var open = wd >= 1 && wd <= 6 && m >= 480 && m < close;
-    if (open) {
-      var left = close - m;
-      status.textContent = left <= 60 ? "Aberto agora · fecha em " + left + " min" : "Aberto agora";
-      status.classList.add("is-open");
-    } else { status.textContent = "Fechado agora"; status.classList.add("is-closed"); }
+    var HRS = { 0: null, 1: [480, 1110], 2: [480, 1110], 3: [480, 1110], 4: [480, 1110], 5: [480, 1110], 6: [480, 900] };
+    var DIAS = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+    var fmt = function (m) { var h = Math.floor(m / 60), mm = m % 60; return (h < 10 ? "0" : "") + h + ":" + (mm < 10 ? "0" : "") + mm; };
+    var dur = function (m) { var h = Math.floor(m / 60), mm = m % 60; return (h ? h + "h " : "") + (mm || !h ? mm + "min" : "").trim(); };
+    var now = function () {
+      var parts = {};
+      try {
+        new Intl.DateTimeFormat("en-US", { timeZone: "America/Sao_Paulo", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false })
+          .formatToParts(new Date()).forEach(function (p) { parts[p.type] = p.value; });
+      } catch (e) {}
+      var wd = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[parts.weekday];
+      if (wd === undefined) { var n = new Date(); wd = n.getDay(); parts.hour = n.getHours(); parts.minute = n.getMinutes(); }
+      return { wd: wd, m: (Number(parts.hour) % 24) * 60 + Number(parts.minute) };
+    };
+    var nextOpen = function (wd, m) {
+      for (var i = 0; i < 7; i++) {
+        var d = (wd + i) % 7, h = HRS[d];
+        if (h && (i > 0 || m < h[0])) return { i: i, d: d, at: h[0] };
+      }
+      return null;
+    };
+    var paint = function () {
+      var t = now(), wd = t.wd, m = t.m, h = HRS[wd];
+      $$(".hours tr").forEach(function (tr) { tr.classList.toggle("is-today", Number(tr.dataset.d) === wd); });
+      status.classList.remove("is-open", "is-closed", "is-soon");
+      if (h && m >= h[0] && m < h[1]) {
+        var left = h[1] - m;
+        status.textContent = "Aberto agora · fecha às " + fmt(h[1]) + " (faltam " + dur(left) + ")";
+        status.classList.add("is-open"); if (left <= 60) status.classList.add("is-soon");
+        if (dayBar) { dayBar.hidden = false; dayBar.firstElementChild.style.width = Math.round((m - h[0]) / (h[1] - h[0]) * 100) + "%"; dayBar.setAttribute("aria-label", "Dia de atendimento: " + fmt(h[0]) + " às " + fmt(h[1])); var s = $("span", dayBar); if (s) s.textContent = fmt(h[0]) + "|" + fmt(h[1]); }
+      } else {
+        var nx = nextOpen(wd, m), txt = "Fechado agora";
+        if (nx) txt += nx.i === 0 ? " · abre hoje às " + fmt(nx.at) : nx.i === 1 ? " · abre amanhã às " + fmt(nx.at) : " · abre " + DIAS[nx.d] + " às " + fmt(nx.at);
+        status.textContent = txt; status.classList.add("is-closed");
+        if (dayBar) dayBar.hidden = true;
+      }
+    };
+    paint(); setInterval(paint, 30000);
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) paint(); });
   }
 
   // Mapa: carrega quando chega perto
